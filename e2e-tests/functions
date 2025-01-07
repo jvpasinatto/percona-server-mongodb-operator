@@ -1685,3 +1685,12 @@ wait_for_oplogs() {
 		sleep 10
 	done
 }
+
+check_server_side_encryption() {
+	local obj_url=$1
+
+	if [ "$(curl -sI $obj_url | grep -i "x-amz-server-side-encryption" | awk -F ": " '{print $2}' | tr -d '\r')" != "AES256" ]; then
+		echo "Error: server side encryption is not AES256"
+		exit 1
+	fi
+}
